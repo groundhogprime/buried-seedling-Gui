@@ -39,26 +39,31 @@ local Tab = Window:CreateTab("Sun", 4483362458) -- Title, Image
 local Button = Tab:CreateButton({
    Name = "Grab All Suns",
    Callback = function()
-local player = game.Players.LocalPlayer  -- Get the local player
-local character = player.Character or player.CharacterAdded:Wait()  -- Ensure the character is loaded
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")  -- Wait for HumanoidRootPart to exist
+local plr = game.Players.LocalPlayer
+local chr = plr.Character or plr.CharacterAdded:Wait() -- Wait for the character to load if it's not yet loaded
+local humanoidRootPart = chr:WaitForChild("HumanoidRootPart") -- Wait for the HumanoidRootPart to be available
 
--- Function to fire touch interest on all SunButton parts
-local function fireSunButtonTouch()
-    -- Loop through all PlantLanes and check for SunButton parts
-    for _, item in pairs(workspace.PlantLanes:GetDescendants()) do
-        -- Check if the part is named "SunButton" and is a valid part
-        if item:IsA("Part") and item.Name == "SunButton" then
-            -- Ensure humanoidRootPart is still valid
-            if humanoidRootPart and item.Parent then
-                firetouchinterest(humanoidRootPart, item, 0)
+-- Function to teleport to all SunButton parts inside specific models for Sun-related parts
+local function teleportToAllSunButtons()
+    -- Ensure the PlantLanes exists in workspace
+    local plantLanes = workspace:WaitForChild("PlantLanes")
+
+    -- Loop through all models inside PlantLanes
+    for _, v in pairs(plantLanes:GetDescendants()) do
+        -- Find the SunButton part inside the model
+        if v.Name == "Sunflower" or v.Name == "TwinSunflower" or v.Name == "TripletSunflower" or v.Name == "ShineVine" or v.Name == "BigTimeSunflower" then
+            local SunButton = v:FindFirstChild("SunButton")
+            if SunButton and SunButton:IsA("Part") then
+                -- Teleport the player to the SunButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(SunButton.Position) -- Teleport to SunButton
+                wait() -- Wait a short amount of time before moving to the next SunButton
             end
         end
     end
 end
 
--- Call the function to fire the touch interest
-fireSunButtonTouch()
+-- Call the function to teleport to all SunButton positions
+teleportToAllSunButtons()
 
 end
 })
@@ -70,29 +75,32 @@ local player = game.Players.LocalPlayer  -- Get the local player
 local character = player.Character or player.CharacterAdded:Wait()  -- Ensure the character is loaded
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")  -- Wait for HumanoidRootPart to exist
 
--- Function to fire touch interest on all CoinButton parts
-local function fireCoinButtonTouch()
+-- Function to teleport to all CoinButton parts inside specific models for Coin-related parts
+local function teleportToAllCoinButtons()
     -- Ensure the PlantLanes exists in workspace
     local plantLanes = workspace:WaitForChild("PlantLanes")
     
+    -- List of model names with Coin-related parts
+    local validModels = {
+        "Marigold", "TwinMarigold", "GoldenMagnet"
+    }
+
     -- Loop through all models inside PlantLanes
     for _, model in pairs(plantLanes:GetDescendants()) do
-        -- Ensure the item is a model
-        if model:IsA("Model") then
-            -- Check if the model contains a CoinButton
+        -- Check if the model is valid and contains a CoinButton
+        if model:IsA("Model") and table.find(validModels, model.Name) then
             local coinButton = model:FindFirstChild("CoinButton")
             if coinButton and coinButton:IsA("Part") then
-                -- Fire touch interest on CoinButton
-                if humanoidRootPart then
-                    firetouchinterest(humanoidRootPart, coinButton, 0)
-                end
+                -- Teleport the player to the CoinButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(coinButton.Position) -- Teleport to CoinButton
+                wait() -- Wait a short amount of time before moving to the next CoinButton
             end
         end
     end
 end
 
--- Call the function to fire the touch interest for CoinButton
-fireCoinButtonTouch()
+-- Call the function to teleport to all CoinButton positions
+teleportToAllCoinButtons()
 
    end,
 })
