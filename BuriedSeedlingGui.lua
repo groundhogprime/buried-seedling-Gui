@@ -105,4 +105,61 @@ teleportToAllCoinButtons()
    end,
 })
 
+local Button = Tab:CreateButton({
+   Name = "Grab Both",
+   Callback = function()
+local player = game.Players.LocalPlayer  -- Get the local player
+local character = player.Character or player.CharacterAdded:Wait()  -- Ensure the character is loaded
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")  -- Wait for HumanoidRootPart to exist
+
+-- Function to teleport to all SunButton parts inside specific models for Sun-related parts
+local function teleportToAllSunButtons()
+    -- Ensure the PlantLanes exists in workspace
+    local plantLanes = workspace:WaitForChild("PlantLanes")
+
+    -- Loop through all models inside PlantLanes
+    for _, v in pairs(plantLanes:GetDescendants()) do
+        -- Find the SunButton part inside the model
+        if v.Name == "Sunflower" or v.Name == "TwinSunflower" or v.Name == "TripletSunflower" or v.Name == "ShineVine" or v.Name == "BigTimeSunflower" then
+            local SunButton = v:FindFirstChild("SunButton")
+            if SunButton and SunButton:IsA("Part") then
+                -- Teleport the player to the SunButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(SunButton.Position) -- Teleport to SunButton
+                wait() -- Wait a short amount of time before moving to the next SunButton
+            end
+        end
+    end
+end
+
+-- Function to teleport to all CoinButton parts inside specific models for Coin-related parts
+local function teleportToAllCoinButtons()
+    -- Ensure the PlantLanes exists in workspace
+    local plantLanes = workspace:WaitForChild("PlantLanes")
+    
+    -- List of model names with Coin-related parts
+    local validModels = {
+        "Marigold", "TwinMarigold", "GoldenMagnet"
+    }
+
+    -- Loop through all models inside PlantLanes
+    for _, model in pairs(plantLanes:GetDescendants()) do
+        -- Check if the model is valid and contains a CoinButton
+        if model:IsA("Model") and table.find(validModels, model.Name) then
+            local coinButton = model:FindFirstChild("CoinButton")
+            if coinButton and coinButton:IsA("Part") then
+                -- Teleport the player to the CoinButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(coinButton.Position) -- Teleport to CoinButton
+                wait() -- Wait a short amount of time before moving to the next CoinButton
+            end
+        end
+    end
+end
+
+-- Call both functions to teleport to all SunButton and CoinButton positions
+teleportToAllSunButtons()
+teleportToAllCoinButtons()
+
+   end,
+})
+
 Rayfield:LoadConfiguration()
