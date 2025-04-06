@@ -106,7 +106,40 @@ teleportToAllCoinButtons()
 })
 
 local Button = Tab:CreateButton({
-   Name = "Grab Both",
+   Name = "Grab All ZenGarden Coins",
+   Callback = function()
+local player = game.Players.LocalPlayer  -- Get the local player
+local character = player.Character or player.CharacterAdded:Wait()  -- Ensure the character is loaded
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")  -- Wait for HumanoidRootPart to exist
+
+-- Function to teleport to all CoinButton parts inside Marigold models in ZenGarden
+local function teleportToAllCoinButtonsInZenGarden()
+    -- Ensure the ZenGardenSpots exists in the workspace
+    local zenGardenSpots = workspace:WaitForChild("ZenGardenSpots")
+    
+    -- Loop through all models inside ZenGardenSpots
+    for _, spot in pairs(zenGardenSpots:GetDescendants()) do
+        -- Check if the model is a Marigold
+        if spot.Name == "Marigold" then
+            -- Find the CoinButton part inside the Marigold model
+            local coinButton = spot:FindFirstChild("CoinButton")
+            if coinButton and coinButton:IsA("Part") then
+                -- Teleport the player to the CoinButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(coinButton.Position)  -- Teleport to CoinButton
+                wait()  -- Wait a short amount of time before moving to the next CoinButton
+            end
+        end
+    end
+end
+
+-- Call the function to teleport to all CoinButton positions in the ZenGarden
+teleportToAllCoinButtonsInZenGarden()
+
+   end,
+})
+
+local Button = Tab:CreateButton({
+   Name = "Grab Everything (Except Falling Sun)",
    Callback = function()
 local player = game.Players.LocalPlayer  -- Get the local player
 local character = player.Character or player.CharacterAdded:Wait()  -- Ensure the character is loaded
@@ -120,12 +153,12 @@ local function teleportToAllSunButtons()
     -- Loop through all models inside PlantLanes
     for _, v in pairs(plantLanes:GetDescendants()) do
         -- Find the SunButton part inside the model
-        if v.Name == "Sunflower" or v.Name == "TwinSunflower" or v.Name == "TripletSunflower" or v.Name == "ShineVine" or v.Name == "BigTimeSunflower" then
+        if v.Name == "Sunflower" or v.Name == "TwinSunflower" or v.Name == "TripletSunflower" or v.Name == "ShineVine" then
             local SunButton = v:FindFirstChild("SunButton")
             if SunButton and SunButton:IsA("Part") then
                 -- Teleport the player to the SunButton position by directly setting CFrame
-                humanoidRootPart.CFrame = CFrame.new(SunButton.Position) -- Teleport to SunButton
-                wait() -- Wait a short amount of time before moving to the next SunButton
+                humanoidRootPart.CFrame = CFrame.new(SunButton.Position)  -- Teleport to SunButton
+                wait()  -- Wait a short amount of time before moving to the next SunButton
             end
         end
     end
@@ -148,16 +181,37 @@ local function teleportToAllCoinButtons()
             local coinButton = model:FindFirstChild("CoinButton")
             if coinButton and coinButton:IsA("Part") then
                 -- Teleport the player to the CoinButton position by directly setting CFrame
-                humanoidRootPart.CFrame = CFrame.new(coinButton.Position) -- Teleport to CoinButton
-                wait() -- Wait a short amount of time before moving to the next CoinButton
+                humanoidRootPart.CFrame = CFrame.new(coinButton.Position)  -- Teleport to CoinButton
+                wait()  -- Wait a short amount of time before moving to the next CoinButton
             end
         end
     end
 end
 
--- Call both functions to teleport to all SunButton and CoinButton positions
+-- Function to teleport to all CoinButton parts inside Marigold models in ZenGarden
+local function teleportToAllCoinButtonsInZenGarden()
+    -- Ensure the ZenGardenSpots exists in workspace
+    local zenGardenSpots = workspace:WaitForChild("ZenGardenSpots")
+    
+    -- Loop through all models inside ZenGardenSpots
+    for _, spot in pairs(zenGardenSpots:GetDescendants()) do
+        -- Check if the model is a Marigold
+        if spot.Name == "Marigold" then
+            -- Find the CoinButton part inside the Marigold model
+            local coinButton = spot:FindFirstChild("CoinButton")
+            if coinButton and coinButton:IsA("Part") then
+                -- Teleport the player to the CoinButton position by directly setting CFrame
+                humanoidRootPart.CFrame = CFrame.new(coinButton.Position)  -- Teleport to CoinButton
+                wait()  -- Wait a short amount of time before moving to the next CoinButton
+            end
+        end
+    end
+end
+
+-- Call all three functions to teleport to all SunButton, CoinButton, and Marigold CoinButton positions
 teleportToAllSunButtons()
 teleportToAllCoinButtons()
+teleportToAllCoinButtonsInZenGarden()
 
    end,
 })
